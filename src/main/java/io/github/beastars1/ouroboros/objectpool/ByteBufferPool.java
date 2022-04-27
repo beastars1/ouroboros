@@ -5,6 +5,9 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * warn：线程不安全
+ */
 public class ByteBufferPool {
     // IdentityHashMap 通过"=="比较 key，也就是比较对象地址值，value 中 false 表示未使用
     private final Map<ByteBuffer, Boolean> map = new IdentityHashMap<>();
