@@ -2,6 +2,7 @@ package io.github.beastars1.ouroboros.objectpool;
 
 import java.nio.ByteBuffer;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ public class ByteBufferPool {
     // IdentityHashMap 通过"=="比较 key，也就是比较对象地址值，value 中 false 表示未使用
     private final Map<ByteBuffer, Boolean> map = new IdentityHashMap<>();
     private static final int BUFFER_SIZE = 1024;
+    // 缩容因子
+    private static final float RESIZE_FACOTR = 0.5F;
     // map 中存在的 byteBuffer 总数量，也就是 map.size()
     private int totalCount = 0;
     // 正在使用的 byteBuffer 数量
@@ -63,7 +66,32 @@ public class ByteBufferPool {
         byteBuffer.clear();
         map.put(byteBuffer, false);
         usedCount--;
+        if (shouldResize()) {
+            resize();
+        }
         return true;
+    }
+
+    /**
+     * 缩容，删除掉一半未使用的 buf
+     */
+    private void resize() {
+        List<ByteBuffer> unusedByteBuffers = map
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().equals(false))
+                .map(Map.Entry::getKey)
+                .toList();
+        // 取一半删除
+        List<ByteBuffer> needToRemove = unusedByteBuffers.subList(0, unusedByteBuffers.size() >> 1);
+        needToRemove.forEach(map::remove);
+    }
+
+    /**
+     * 已使用的 buf 低于存在的 buf 总数的一半时，缩容
+     */
+    private boolean shouldResize() {
+        return usedCount * 1.0 / totalCount <= RESIZE_FACOTR;
     }
 
     @Override

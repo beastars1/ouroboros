@@ -22,4 +22,18 @@ public class ByteBufferPoolTest {
         Assertions.assertEquals(2, pool.getUsedCount());
         Assertions.assertEquals(3, pool.getSize());
     }
+
+    @Test
+    void resizeTest() {
+        ByteBufferPool pool = new ByteBufferPool();
+        ByteBuffer b1 = pool.borrowObject();
+        ByteBuffer b2 = pool.borrowObject();
+        ByteBuffer b3 = pool.borrowObject();
+        Assertions.assertEquals(3, pool.getUsedCount());
+        Assertions.assertEquals(3, pool.getSize());
+        pool.returnObject(b1);
+        pool.returnObject(b2);
+        Assertions.assertEquals(1, pool.getUsedCount());
+        Assertions.assertEquals(2, pool.getSize());
+    }
 }
