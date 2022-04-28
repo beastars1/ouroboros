@@ -12,7 +12,7 @@ public class ByteBufferPool {
     // IdentityHashMap 通过"=="比较 key，也就是比较对象地址值，value 中 false 表示未使用
     private final Map<ByteBuffer, Boolean> map = new IdentityHashMap<>();
     private static final int BUFFER_SIZE = 1024;
-    // 已使用的 byteBuffer 总数量
+    // map 中存在的 byteBuffer 总数量，也就是 map.size()
     private int totalCount = 0;
     // 正在使用的 byteBuffer 数量
     private int usedCount = 0;
