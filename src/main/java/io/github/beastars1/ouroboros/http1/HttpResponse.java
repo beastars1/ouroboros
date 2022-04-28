@@ -1,6 +1,6 @@
 package io.github.beastars1.ouroboros.http1;
 
-import java.util.Arrays;
+import io.github.beastars1.ouroboros.collection.ByteArray;
 
 /**
  * HTTP/1.1 200 OK
@@ -13,7 +13,7 @@ public class HttpResponse {
     private String statusCode = "200";
     private String reasonPhrase = "OK";
     private final HttpHeaders httpHeaders = new HttpHeaders();
-    private byte[] body;
+    private ByteArray body;
 
     public void addHeader(String key, String value) {
         httpHeaders.add(key, value);
@@ -43,11 +43,11 @@ public class HttpResponse {
         this.reasonPhrase = reasonPhrase;
     }
 
-    public byte[] getBody() {
+    public ByteArray getBody() {
         return body;
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(ByteArray body) {
         this.body = body;
     }
 
@@ -58,7 +58,7 @@ public class HttpResponse {
                 ", statusCode='" + statusCode + '\'' +
                 ", reasonPhrase='" + reasonPhrase + '\'' +
                 ", httpHeaders=" + httpHeaders +
-                ", body=" + Arrays.toString(body) +
+                ", body=" + body +
                 '}';
     }
 }
