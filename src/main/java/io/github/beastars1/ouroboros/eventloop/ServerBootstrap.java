@@ -48,7 +48,7 @@ public class ServerBootstrap {
         log.info("server started on " + this.port + " port");
         while (!Thread.interrupted()) {
             this.selector.select();
-            // 遍历所有注册的 channel，如果有新连接，就分配给主线程去处理
+            // 遍历可操作的 channel，如果有新连接，main reactor 也就是当前线程接收，并分配给 sub reactor 去处理读写数据
             Set<SelectionKey> keys = this.selector.selectedKeys();
             Iterator<SelectionKey> iterator = keys.iterator();
             while (iterator.hasNext()) {

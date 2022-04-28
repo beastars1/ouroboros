@@ -8,9 +8,7 @@ public class EchoServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         ServerBootstrap server = new ServerBootstrap();
         server
-                .provide(socketContext -> {
-                    return new EchoServerHandler(socketContext);
-                })
+                .provide(EchoServerHandler::new)
                 .bind(8080);
     }
 }

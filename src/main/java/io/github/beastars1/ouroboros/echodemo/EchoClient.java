@@ -10,11 +10,10 @@ import java.util.concurrent.ExecutionException;
 public class EchoClient {
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         ClientBootstrap client = new ClientBootstrap();
-        client.setSocketHandlerProvider(socketContext -> {
-            return new EchoClientHandler(socketContext);
-        });
         InetSocketAddress address = new InetSocketAddress("localhost", 8080);
-        CompletableFuture<String> future = client.connect(address);
+        CompletableFuture<String> future = client
+                .provide(EchoClientHandler::new)
+                .connect(address);
         future.get();
     }
 }

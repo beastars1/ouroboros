@@ -23,7 +23,13 @@ public class ClientBootstrap {
         return this.socketEventLoop.loop();
     }
 
-    public void setSocketHandlerProvider(SocketHandlerProvider socketHandlerProvider) {
+    /**
+     * 传入客户端的处理逻辑
+     *
+     * @param socketHandlerProvider 处理逻辑
+     */
+    public ClientBootstrap provide(SocketHandlerProvider socketHandlerProvider) {
         this.socketHandlerProvider = socketHandlerProvider;
+        return this;
     }
 }
