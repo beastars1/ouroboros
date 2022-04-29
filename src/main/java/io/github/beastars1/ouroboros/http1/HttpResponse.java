@@ -6,10 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 /**
- * HTTP/1.1 200 OK  \r\n
- * Header k:v  \r\n
- * \r\n  \r\n
- * Body  \r\n
+ * HTTP/1.1 200 OK\r\n
+ * Header k:v\r\n
+ * \r\n
+ * Body
  */
 public class HttpResponse {
     private final String version = "HTTP/1.1";
@@ -32,7 +32,7 @@ public class HttpResponse {
                 .stream()
                 .map(header -> header.key() + ": " + header.value())
                 .collect(Collectors.joining("\r\n"))
-                + "\r\n\r\n";
+                + "\r\n" + "\r\n";
         // HTTP/1.1 200 OK
         ByteArray byteArray = new ByteArray();
         byteArray.add((version + " ").getBytes(StandardCharsets.US_ASCII))

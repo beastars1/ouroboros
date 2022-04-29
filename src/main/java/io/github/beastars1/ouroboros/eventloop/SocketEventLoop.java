@@ -39,6 +39,7 @@ public class SocketEventLoop {
         String connectionId = UUID.randomUUID().toString();
         SocketContext socketContext = new SocketContext(socketChannel, key, Thread.currentThread(), connectionId,
                 this.selector, this.byteBufferPool);
+        // 每一个 socketContext 都会生成一个 handler 对象
         SocketHandler handler = socketHandlerProvider.provide(socketContext);
         // 附加处理逻辑，处理时取出
         key.attach(handler);

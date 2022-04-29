@@ -12,6 +12,7 @@ public class HttpServerHandler implements SocketHandler {
     public static final Logger log = LoggerFactory.getLogger(HttpServerHandler.class);
 
     private final ByteBuffer buffer = ByteBuffer.allocate(1024);
+    private final HttpRequestParser httpRequestParser = new HttpRequestParser();
     private final SocketContext ctx;
 
     public HttpServerHandler(SocketContext ctx) {
@@ -29,8 +30,14 @@ public class HttpServerHandler implements SocketHandler {
         buffer.flip();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
-        // todo 处理http请求
-        log.info(new String(bytes));
+        // 转换 http 请求
+        httpRequestParser.read(buffer);
+//        log.info(new String(bytes));
         buffer.clear();
+        if (!httpRequestParser.ready()) {
+            return;
+        }
+        HttpRequest httpRequest = httpRequestParser.getHttpRequest();
+        log.info(httpRequest.toString());
     }
 }

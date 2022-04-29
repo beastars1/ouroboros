@@ -15,11 +15,11 @@ public class HttpHeaders {
         headers.removeIf(header -> header.key().equals(k));
     }
 
-    public HttpHeader get(String key) {
+    public String get(String key) {
         key = key.toLowerCase();
         for (HttpHeader header : headers) {
             if (header.key().equals(key)) {
-                return header;
+                return header.value();
             }
         }
         return null;

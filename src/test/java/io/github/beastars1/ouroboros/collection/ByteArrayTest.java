@@ -19,7 +19,7 @@ class ByteArrayTest {
     }
 
     @Test
-    void getChar() {
+    void getCharTest() {
         ByteArray byteArray = new ByteArray();
         byteArray.add(new byte[]{36, 65, 97});
         char c1 = byteArray.getChar(0);
@@ -28,5 +28,13 @@ class ByteArrayTest {
         assertEquals('$', c1);
         assertEquals('A', c2);
         assertEquals('a', c3);
+    }
+
+    @Test
+    void removeTest() {
+        ByteArray byteArray = new ByteArray();
+        byteArray.add(new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+        byteArray.remove(1, 6);
+        assertArrayEquals(new byte[]{0, 7, 8, 9}, byteArray.getBytes());
     }
 }

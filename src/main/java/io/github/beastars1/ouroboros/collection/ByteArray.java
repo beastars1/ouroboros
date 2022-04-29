@@ -45,7 +45,7 @@ public class ByteArray {
     }
 
     public char getChar(int index) {
-        if (index + 1 > size) {
+        if (index >= size) {
             throw new ArrayIndexOutOfBoundsException();
         }
         return (char) source[index];
@@ -65,6 +65,21 @@ public class ByteArray {
 
     public int size() {
         return size;
+    }
+
+    /**
+     * 删除指定长度的 byte
+     *
+     * @param position 开始的索引
+     * @param offset   偏移量
+     */
+    public void remove(int position, int offset) {
+        int newSize = size - offset;
+        byte[] newBytes = new byte[newSize];
+        System.arraycopy(source, 0, newBytes, 0, position);
+        System.arraycopy(source, position + offset, newBytes, position, newSize - position);
+        source = newBytes;
+        size -= offset;
     }
 
     private void resize(long newSize) {
