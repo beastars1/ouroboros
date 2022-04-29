@@ -1,14 +1,21 @@
 package io.github.beastars1.ouroboros.collection;
 
+import java.util.Arrays;
+
 /**
  * 封装 byte[] 操作
  */
 public class ByteArray {
+    private static final float RESIZE_FACTOR = 0.75F;
     private byte[] source = new byte[10];
+    private int capacity = 10;
     private int size = 0;
 
     public ByteArray add(byte[] bytes) {
         int length = bytes.length;
+        if (shouldResize(length)) {
+            resize(length);
+        }
         System.arraycopy(bytes, 0, source, size, length);
         size += length;
         return this;
@@ -20,10 +27,13 @@ public class ByteArray {
      * [高位在前,低位在后] 大端模式
      * byte[1 2 3 4] 的二进制就是 [00000001 00000010 00000011 00000100]
      * int 是 32 位，也就是这 32 位组成了一个 int: 16909060
-     *
+     * <p>
      * 对 char，byte 或者 short 进行移位处理时，会先自动转换成一个 int:32bit
      */
     public int getInt(int index) {
+        if (index + 4 > size) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
         byte first = source[index];
         byte second = source[index + 1];
         byte third = source[index + 2];
@@ -35,6 +45,9 @@ public class ByteArray {
     }
 
     public char getChar(int index) {
+        if (index + 1 > size) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
         return (char) source[index];
     }
 
@@ -52,5 +65,26 @@ public class ByteArray {
 
     public int size() {
         return size;
+    }
+
+    private void resize(long newSize) {
+        long newTotalSize = size + newSize;
+        if (newTotalSize >= capacity) {
+            capacity = (int) (newTotalSize << 1);
+        } else {
+            capacity = capacity << 1;
+        }
+        source = Arrays.copyOf(source, capacity);
+    }
+
+    /**
+     * 大小超过容量的 0.75 倍时，扩容
+     *
+     * @param newSize 要添加的 byte[] 长度
+     * @return 是否扩容
+     */
+    private boolean shouldResize(long newSize) {
+        float maxCapacity = capacity * RESIZE_FACTOR;
+        return size >= maxCapacity || size + newSize >= maxCapacity;
     }
 }

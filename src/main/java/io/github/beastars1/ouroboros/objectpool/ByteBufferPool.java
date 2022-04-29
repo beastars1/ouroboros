@@ -14,7 +14,7 @@ public class ByteBufferPool {
     private final Map<ByteBuffer, Boolean> map = new IdentityHashMap<>();
     private static final int BUFFER_SIZE = 1024;
     // 缩容因子
-    private static final float RESIZE_FACOTR = 0.5F;
+    private static final float RESIZE_FACTOR = 0.5F;
     // map 中存在的 byteBuffer 总数量，也就是 map.size()
     private int totalCount = 0;
     // 正在使用的 byteBuffer 数量
@@ -91,7 +91,7 @@ public class ByteBufferPool {
      * 已使用的 buf 低于存在的 buf 总数的一半时，缩容
      */
     private boolean shouldResize() {
-        return usedCount * 1.0 / totalCount <= RESIZE_FACOTR;
+        return usedCount * 1.0 / totalCount <= RESIZE_FACTOR;
     }
 
     @Override

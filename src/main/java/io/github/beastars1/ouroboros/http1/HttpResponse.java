@@ -2,11 +2,14 @@ package io.github.beastars1.ouroboros.http1;
 
 import io.github.beastars1.ouroboros.collection.ByteArray;
 
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+
 /**
- * HTTP/1.1 200 OK
- * Header k:v
- *
- * Body
+ * HTTP/1.1 200 OK  \r\n
+ * Header k:v  \r\n
+ * \r\n  \r\n
+ * Body  \r\n
  */
 public class HttpResponse {
     private final String version = "HTTP/1.1";
@@ -17,6 +20,32 @@ public class HttpResponse {
 
     public void addHeader(String key, String value) {
         httpHeaders.add(key, value);
+    }
+
+    public byte[] getBytes() {
+        httpHeaders.remove("content-length");
+        if (body != null) {
+            httpHeaders.add("content-length", String.valueOf(body.size()));
+        }
+        // headers
+        String s = httpHeaders.getHeaders()
+                .stream()
+                .map(header -> header.key() + ": " + header.value())
+                .collect(Collectors.joining("\r\n"))
+                + "\r\n\r\n";
+        // HTTP/1.1 200 OK
+        ByteArray byteArray = new ByteArray();
+        byteArray.add((version + " ").getBytes(StandardCharsets.US_ASCII))
+                .add((statusCode + " ").getBytes(StandardCharsets.US_ASCII))
+                .add((reasonPhrase + "\r\n").getBytes(StandardCharsets.US_ASCII));
+        // Headers
+        byteArray.add(s.getBytes(StandardCharsets.US_ASCII));
+        // Body
+        if (body != null) {
+            byteArray.add(body.getBytes());
+        }
+        byteArray.add("\r\n".getBytes(StandardCharsets.US_ASCII));
+        return byteArray.getBytes();
     }
 
     public String getVersion() {

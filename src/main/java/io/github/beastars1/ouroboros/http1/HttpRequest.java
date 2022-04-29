@@ -3,10 +3,10 @@ package io.github.beastars1.ouroboros.http1;
 import java.util.Arrays;
 
 /**
- * GET /hello HTTP/1.1
- * Headers k:v
- *
- * Body
+ * GET /hello HTTP/1.1  \r\n
+ * Headers k:v  \r\n
+ * \r\n  \r\n
+ * Body  \r\n
  */
 public record HttpRequest(HttpMethod httpMethod,
                           String uri,
