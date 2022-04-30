@@ -15,6 +15,6 @@ mvn clean package
 
 ## HTTP/1.1 Server
 ```bash
-java -cp .\ouroboros.jar io.github.beastars1.ouroboros.http1.HttpServer
+java -cp .\ouroboros.jar io.github.beastars1.ouroboros.http1.HttpServer 8080
 ```
 default port is `8080`, server is `localhost:8080`

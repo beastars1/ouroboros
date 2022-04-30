@@ -44,6 +44,7 @@ public class SocketEventLoop {
         // 附加处理逻辑，处理时取出
         key.attach(handler);
         handler.onRegistered();
+        // 唤醒 select()
         this.selector.wakeup();
     }
 

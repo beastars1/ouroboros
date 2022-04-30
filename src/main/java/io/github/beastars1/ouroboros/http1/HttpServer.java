@@ -7,9 +7,14 @@ import java.io.IOException;
 
 public class HttpServer {
     public static void main(String[] args) throws IOException, InterruptedException {
+        int port = 8080;
+        if (args.length == 1) {
+            port = Integer.parseInt(args[0]);
+        }
+
         ServerBootstrap server = new ServerBootstrap();
         server
                 .provide(socketContext -> new HttpServerHandler(socketContext, new UriHandler()))
-                .bind(8080);
+                .bind(port);
     }
 }
