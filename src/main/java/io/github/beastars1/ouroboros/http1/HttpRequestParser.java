@@ -16,7 +16,6 @@ public class HttpRequestParser {
     private HttpHeaders headers;
     private byte[] body;
     private boolean ready = false;
-    private int position = 0;
 
     public void read(ByteBuffer buffer) {
         byte[] bytes = new byte[buffer.remaining()];
@@ -132,6 +131,7 @@ public class HttpRequestParser {
                     String value = kv[1].trim();
                     headers.add(key, value);
                 });
+        // 删除 \r\n\r\n
         byteArray.remove(0, i + 4);
     }
 

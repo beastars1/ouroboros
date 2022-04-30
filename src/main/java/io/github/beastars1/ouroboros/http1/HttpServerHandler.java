@@ -28,8 +28,6 @@ public class HttpServerHandler implements SocketHandler {
             return;
         }
         buffer.flip();
-        byte[] bytes = new byte[buffer.remaining()];
-        buffer.get(bytes);
         // 转换 http 请求
         httpRequestParser.read(buffer);
 //        log.info(new String(bytes));
