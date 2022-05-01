@@ -37,6 +37,7 @@ public class TrueServerHandler implements SocketHandler {
     public void close() throws IOException {
         ctx.byteBufferPool().returnObject(buffer);
         ctx.socketChannel().close();
+        log.info("ID: " + ctx.connectionId() + ", connection closed");
     }
 
     /**
