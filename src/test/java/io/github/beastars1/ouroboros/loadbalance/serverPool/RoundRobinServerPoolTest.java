@@ -1,12 +1,12 @@
-package io.github.beastars1.ouroboros.loadbalance;
+package io.github.beastars1.ouroboros.loadbalance.serverPool;
 
-import io.github.beastars1.ouroboros.loadbalance.serverPool.RoundRobinServerPool;
+import io.github.beastars1.ouroboros.loadbalance.Server;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RoundRobinServerPoolTest {
     @Test
@@ -15,7 +15,7 @@ class RoundRobinServerPoolTest {
         servers.add(new Server("localhost", 8080));
         servers.add(new Server("localhost", 8081));
         servers.add(new Server("localhost", 8082));
-        RoundRobinServerPool serverPool = new RoundRobinServerPool(servers);
+        ServerPool serverPool = new RoundRobinServerPool(servers);
         Server s1 = serverPool.getServer();
         Server s2 = serverPool.getServer();
         Server s3 = serverPool.getServer();

@@ -1,8 +1,8 @@
 package io.github.beastars1.ouroboros.loadbalance;
 
 import io.github.beastars1.ouroboros.eventloop.ServerBootstrap;
-import io.github.beastars1.ouroboros.loadbalance.serverPool.RoundRobinServerPool;
 import io.github.beastars1.ouroboros.loadbalance.serverPool.ServerPool;
+import io.github.beastars1.ouroboros.loadbalance.serverPool.ServerPoolFactory;
 import io.github.beastars1.ouroboros.logging.Logger;
 import io.github.beastars1.ouroboros.logging.LoggerFactory;
 
@@ -25,7 +25,13 @@ public class LoadBalancer {
         List<Server> serverList = Arrays.stream(split)
                 .map(Server::parseServer)
                 .toList();
-        ServerPool serverPool = new RoundRobinServerPool(serverList);
+        String lbStrategy = (args.length == 3) ? args[2] : "roundRobin";
+        log.info("load balancer strategy: " + lbStrategy);
+        ServerPool serverPool = switch (lbStrategy) {
+            case "roundRobin" -> ServerPoolFactory.roundRobinPool(serverList);
+            case "random" -> ServerPoolFactory.randomPool(serverList);
+            default -> throw new RuntimeException("lb strategy is wrong");
+        };
         ServerBootstrap server = new ServerBootstrap();
         server
                 .provide(ctx -> new LoadBalanceHandler(ctx, serverPool.getServer()))
