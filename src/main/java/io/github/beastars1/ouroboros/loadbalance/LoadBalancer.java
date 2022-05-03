@@ -30,11 +30,17 @@ public class LoadBalancer {
         ServerPool serverPool = switch (lbStrategy) {
             case "roundRobin" -> ServerPoolFactory.roundRobinPool(serverList);
             case "random" -> ServerPoolFactory.randomPool(serverList);
+            case "minConnection" -> ServerPoolFactory.minConnectionPool(serverList);
             default -> throw new RuntimeException("lb strategy is wrong");
         };
-        ServerBootstrap server = new ServerBootstrap();
-        server
-                .provide(ctx -> new LoadBalanceHandler(ctx, serverPool.getServer()))
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap
+                .provide(ctx -> {
+                    Server server = serverPool.getServer();
+                    log.info("get server: " + server);
+                    server.addConnection();
+                    return new LoadBalanceHandler(ctx, server);
+                })
                 .bind(port);
     }
 }

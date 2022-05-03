@@ -5,6 +5,9 @@ import io.github.beastars1.ouroboros.loadbalance.Server;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 轮询选择服务
+ */
 public class RoundRobinServerPool implements ServerPool {
     private final List<Server> servers = new ArrayList<>();
     private int i = 0;

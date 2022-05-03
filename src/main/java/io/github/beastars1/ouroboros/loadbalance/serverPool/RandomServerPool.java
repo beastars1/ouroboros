@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 随机选择服务
+ */
 public class RandomServerPool implements ServerPool{
     private final List<Server> servers = new ArrayList<>();
     private final Random random = new Random();

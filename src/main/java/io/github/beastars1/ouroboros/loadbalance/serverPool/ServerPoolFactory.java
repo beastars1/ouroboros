@@ -12,4 +12,8 @@ public class ServerPoolFactory {
     public static ServerPool randomPool(List<Server> servers) {
         return new RandomServerPool(servers);
     }
+
+    public static ServerPool minConnectionPool(List<Server> servers) {
+        return new MinConnectionServerPool(servers);
+    }
 }

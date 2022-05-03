@@ -31,10 +31,9 @@ public class LoadBalanceHandler implements SocketHandler {
 
     @Override
     public void onRegistered() throws IOException {
-        log.info(server.toString());
         ctx.selectionKey().interestOps(SelectionKey.OP_READ);
         // lb 所在服务器连接真正服务器进行转发
-        SocketChannel trueSocket = SocketChannel.open(new InetSocketAddress(server.host(), server.port()));
+        SocketChannel trueSocket = SocketChannel.open(new InetSocketAddress(server.getHost(), server.getPort()));
         trueSocket.configureBlocking(false);
         SelectionKey key = trueSocket.register(ctx.selector(), SelectionKey.OP_READ);
         TrueServerHandler trueServerHandler = new TrueServerHandler(new SocketContext(trueSocket, key, ctx.thread(),
@@ -78,6 +77,8 @@ public class LoadBalanceHandler implements SocketHandler {
     public void close() throws IOException {
         ctx.byteBufferPool().returnObject(buffer);
         ctx.socketChannel().close();
+        server.release();
+        log.info("release server connection: " + server);
         trueServerHandler.close();
     }
 }

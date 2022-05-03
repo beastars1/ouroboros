@@ -19,11 +19,11 @@ class RoundRobinServerPoolTest {
         Server s1 = serverPool.getServer();
         Server s2 = serverPool.getServer();
         Server s3 = serverPool.getServer();
-        assertEquals(8080, s1.port());
-        assertEquals(8081, s2.port());
-        assertEquals(8082, s3.port());
+        assertEquals(8080, s1.getPort());
+        assertEquals(8081, s2.getPort());
+        assertEquals(8082, s3.getPort());
         Server s4 = serverPool.getServer();
-        assertEquals(8080, s4.port());
+        assertEquals(8080, s4.getPort());
     }
 
 }
