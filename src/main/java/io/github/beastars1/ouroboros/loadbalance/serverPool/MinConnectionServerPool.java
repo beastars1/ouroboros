@@ -25,7 +25,6 @@ public class MinConnectionServerPool implements ServerPool{
         Optional<Server> optionalServer = servers
                 .stream()
                 .sorted(Comparator.comparing(Server::getConnectionCount))
-                .peek(server -> System.out.print(server.getPort() + " - "))
                 .limit(1)
                 .findAny();
         return optionalServer.orElse(servers.get(0));
