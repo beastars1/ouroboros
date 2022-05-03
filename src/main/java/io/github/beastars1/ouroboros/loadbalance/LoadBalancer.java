@@ -1,6 +1,8 @@
 package io.github.beastars1.ouroboros.loadbalance;
 
 import io.github.beastars1.ouroboros.eventloop.ServerBootstrap;
+import io.github.beastars1.ouroboros.loadbalance.serverPool.RoundRobinServerPool;
+import io.github.beastars1.ouroboros.loadbalance.serverPool.ServerPool;
 import io.github.beastars1.ouroboros.logging.Logger;
 import io.github.beastars1.ouroboros.logging.LoggerFactory;
 
@@ -23,7 +25,7 @@ public class LoadBalancer {
         List<Server> serverList = Arrays.stream(split)
                 .map(Server::parseServer)
                 .toList();
-        ServerPool serverPool = new ServerPool(serverList);
+        ServerPool serverPool = new RoundRobinServerPool(serverList);
         ServerBootstrap server = new ServerBootstrap();
         server
                 .provide(ctx -> new LoadBalanceHandler(ctx, serverPool.getServer()))

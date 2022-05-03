@@ -1,19 +1,22 @@
-package io.github.beastars1.ouroboros.loadbalance;
+package io.github.beastars1.ouroboros.loadbalance.serverPool;
+
+import io.github.beastars1.ouroboros.loadbalance.Server;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerPool {
+public class RoundRobinServerPool implements ServerPool {
     private final List<Server> servers = new ArrayList<>();
     private int i = 0;
 
-    public ServerPool(List<Server> servers) {
+    public RoundRobinServerPool(List<Server> servers) {
         if (servers.size() == 0) {
             throw new RuntimeException("servers size should be greater than 0");
         }
         this.servers.addAll(servers);
     }
 
+    @Override
     public Server getServer() {
         if (i >= servers.size()) {
             i = 0;
