@@ -3,6 +3,7 @@ package io.github.beastars1.ouroboros.eventloop;
 import io.github.beastars1.ouroboros.logging.Logger;
 import io.github.beastars1.ouroboros.logging.LoggerFactory;
 import io.github.beastars1.ouroboros.objectpool.ByteBufferPool;
+import io.github.beastars1.ouroboros.utils.KeyUtils;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -63,10 +64,14 @@ public class SocketEventLoop {
                 while (iterator.hasNext()) {
                     SelectionKey key = iterator.next();
                     SocketHandler handler = (SocketHandler) key.attachment();
+                    int readyOps = key.readyOps();
                     try {
-                        if (key.isReadable()) {
+                        // 读可能先发生，先处理读
+                        if (KeyUtils.isReadable(readyOps)) {
                             handler.onRead();
-                        } else if (key.isWritable()) {
+                        }
+                        // 读和写可能发生在同一个循环中
+                        if (KeyUtils.isWritable(readyOps)) {
                             handler.onWrite();
                         }
                     } catch (IOException e) {
